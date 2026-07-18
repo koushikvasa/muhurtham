@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import type { Kalyanam } from "@/app/data/events";
 import { BRAND } from "@/app/data/events";
@@ -17,7 +19,20 @@ const cardVariants: Variants = {
 
 export default function EventCard({ item }: { item: Kalyanam }) {
   const reduce = useReducedMotion();
+  const [imgFailed, setImgFailed] = useState(false);
   const { accent } = item;
+
+  const showImage = Boolean(item.image) && !imgFailed;
+
+  const motifFallback = (
+    <Motif
+      id={item.motif}
+      from={accent.from}
+      to={accent.to}
+      title={`${item.englishTitle} motif`}
+      className="h-full w-full drop-shadow-[0_2px_6px_rgba(58,30,18,0.15)]"
+    />
+  );
 
   return (
     <motion.article
@@ -26,41 +41,66 @@ export default function EventCard({ item }: { item: Kalyanam }) {
       transition={{ type: "spring", stiffness: 260, damping: 22 }}
       className="group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-[color:var(--color-gold)]/40 bg-[color:var(--color-cream)]/80 p-6 shadow-[0_18px_50px_-24px_rgba(58,30,18,0.55)] backdrop-blur-sm sm:p-7"
       style={{
-        // subtle per-card top wash in its ceremonial accent
         backgroundImage: `radial-gradient(120% 70% at 50% -10%, ${accent.glow}, transparent 60%)`,
       }}
     >
       {/* corner filigree */}
       <span
         aria-hidden
-        className="pointer-events-none absolute right-4 top-4 h-8 w-8 rounded-tr-xl border-r-2 border-t-2 border-[color:var(--color-gold)]/50 transition-opacity duration-500 group-hover:opacity-100 opacity-60"
+        className="pointer-events-none absolute right-4 top-4 z-10 h-8 w-8 rounded-tr-xl border-r-2 border-t-2 border-[color:var(--color-gold)]/50 opacity-60 transition-opacity duration-500 group-hover:opacity-100"
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute bottom-4 left-4 h-8 w-8 rounded-bl-xl border-b-2 border-l-2 border-[color:var(--color-gold)]/50 opacity-60 transition-opacity duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute bottom-4 left-4 z-10 h-8 w-8 rounded-bl-xl border-b-2 border-l-2 border-[color:var(--color-gold)]/50 opacity-60 transition-opacity duration-500 group-hover:opacity-100"
       />
 
-      {/* Motif medallion */}
-      <div className="relative mx-auto mb-5 aspect-square w-full max-w-[220px]">
+      {/* Visual — arched temple frame around the kalyanam image */}
+      <div className="relative mx-auto mb-5 w-full max-w-[300px]">
         <div
           aria-hidden
-          className="absolute inset-2 rounded-full blur-2xl"
+          className="absolute -inset-1 rounded-[1.6rem] blur-xl"
           style={{ background: accent.glow }}
         />
-        <div className="relative h-full w-full rounded-full border border-[color:var(--color-gold)]/40 bg-[color:var(--color-cream)]/60 p-3">
-          <LazyLottie
-            src={item.lottieSrc}
-            className="h-full w-full"
-            fallback={
-              <Motif
-                id={item.motif}
-                from={accent.from}
-                to={accent.to}
-                title={`${item.englishTitle} motif`}
-                className="h-full w-full drop-shadow-[0_2px_6px_rgba(58,30,18,0.15)]"
+        <div
+          className="relative aspect-[4/5] w-full overflow-hidden rounded-[1.4rem] rounded-t-[6rem] border-2 border-[color:var(--color-gold)]/60 bg-[color:var(--color-cream)] shadow-inner"
+          style={{
+            boxShadow: `inset 0 0 0 3px rgba(251,246,236,0.6), inset 0 0 26px ${accent.glow}`,
+          }}
+        >
+          {showImage ? (
+            <Image
+              src={item.image as string}
+              alt={`${item.englishTitle} — ${item.teluguTitle}`}
+              fill
+              sizes="(max-width: 640px) 88vw, (max-width: 1024px) 45vw, 300px"
+              className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+              onError={() => setImgFailed(true)}
+            />
+          ) : item.lottieSrc ? (
+            <div className="flex h-full w-full items-center justify-center p-4">
+              <LazyLottie
+                src={item.lottieSrc}
+                className="h-full w-full"
+                fallback={motifFallback}
               />
-            }
-          />
+            </div>
+          ) : (
+            <div className="flex h-full w-full items-center justify-center p-5">
+              {motifFallback}
+            </div>
+          )}
+
+          {/* gentle gold vignette over the image */}
+          {showImage && (
+            <span
+              aria-hidden
+              className="pointer-events-none absolute inset-0 rounded-[1.4rem] rounded-t-[6rem]"
+              style={{
+                background:
+                  "radial-gradient(120% 90% at 50% 0%, transparent 55%, rgba(122,31,43,0.18) 100%)",
+              }}
+            />
+          )}
         </div>
       </div>
 
@@ -78,10 +118,7 @@ export default function EventCard({ item }: { item: Kalyanam }) {
         {item.englishTitle}
       </p>
 
-      <span
-        aria-hidden
-        className="rule-gold mx-auto my-4 block h-px w-24"
-      />
+      <span aria-hidden className="rule-gold mx-auto my-4 block h-px w-24" />
 
       {/* One-line placeholder description */}
       <p className="text-center text-[color:var(--color-ink)]/80 text-[length:var(--text-small)]">

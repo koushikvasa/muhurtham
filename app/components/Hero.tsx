@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion, type Variants } from "framer-motion";
 import { BRAND } from "@/app/data/events";
 import Torana from "@/app/components/Torana";
@@ -32,20 +33,43 @@ export default function Hero() {
         animate={reduce ? undefined : "show"}
         className="relative z-10 mx-auto flex max-w-3xl flex-col items-center pt-[clamp(4rem,14vw,8rem)] text-center"
       >
-        {/* kicker */}
+        {/* kicker — Telugu */}
         <motion.p
           variants={reduce ? undefined : rise}
-          className="mb-3 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-gold)]/50 bg-[color:var(--color-cream)]/70 px-4 py-1.5 text-[length:var(--text-small)] uppercase tracking-[0.25em] text-[color:var(--color-ink-soft)]"
+          lang="te"
+          className="mb-4 inline-flex items-center gap-2 rounded-full border border-[color:var(--color-gold)]/50 bg-[color:var(--color-cream)]/70 px-5 py-1.5 font-telugu text-[length:var(--text-lede)] tracking-[0.15em] text-[color:var(--color-ink-soft)]"
         >
-          Andhra Pradesh · కళ్యాణం
+          {BRAND.kickerTelugu}
         </motion.p>
 
-        {/* Brand — Telugu is the hero */}
+        {/* Brand crest — logo, blended into the cream & feathered at the edges */}
+        <motion.div
+          variants={reduce ? undefined : rise}
+          className="w-[clamp(240px,64vw,540px)]"
+        >
+          <Image
+            src={BRAND.logo}
+            alt="ముహూర్తం — Muhurtham"
+            width={2816}
+            height={1536}
+            priority
+            sizes="(max-width: 640px) 64vw, 540px"
+            className="h-auto w-full mix-blend-multiply"
+            style={{
+              WebkitMaskImage:
+                "radial-gradient(75% 70% at 50% 50%, #000 60%, transparent 100%)",
+              maskImage:
+                "radial-gradient(75% 70% at 50% 50%, #000 60%, transparent 100%)",
+            }}
+          />
+        </motion.div>
+
+        {/* Telugu name — the visual hero */}
         <motion.h1
           variants={reduce ? undefined : rise}
           lang="te"
-          className="font-telugu font-extrabold leading-[0.95] text-[color:var(--color-maroon)]"
-          style={{ fontSize: "var(--text-brand)" }}
+          className="-mt-2 font-telugu font-extrabold leading-[0.95] text-[color:var(--color-maroon)]"
+          style={{ fontSize: "var(--text-hero)" }}
         >
           {BRAND.telugu}
         </motion.h1>

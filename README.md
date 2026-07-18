@@ -39,7 +39,20 @@ npm run lint     # eslint
 
 All events live in **one array** — [`app/data/events.ts`](app/data/events.ts).
 Edit the Telugu/English titles, descriptions, per-card accent gradients, or the
-brand strings there. Nothing else needs to change.
+brand strings (`BRAND`, incl. the logo path and kicker) there. Nothing else
+needs to change.
+
+Each card's visual has three tiers, used in priority order:
+**`image` → `lottieSrc` → static SVG `motif`.** Set `image` to a photo/artwork in
+`public/` (e.g. `/kalyanams/siva.png`) to show it first; otherwise the card uses
+a Lottie, and finally the built-in ceremonial SVG motif.
+
+### ⚠️ Where images and assets go
+
+**Put all images and binaries in `public/`, never inside `app/`.** Large files
+under `app/` make the Turbopack dev server hang at `Compiling / …`. Current
+layout: `public/brand/muhurtham-logo.png`, `public/kalyanams/<id>.png`,
+`public/lottie/<id>.lottie`.
 
 ### Adding a Lottie animation per card
 
@@ -73,8 +86,8 @@ shift. Keep JSON weight sane to protect the Lighthouse score.
 ## Signature motion
 
 - A soft **gold torana** (garland arch) draws itself across the hero on load,
-  with staggered mango-leaf garlands and gently swinging bells — SVG + Framer
-  Motion (lighter than Lottie).
+  with a staggered mango-leaf garland and gently bobbing marigold accents — SVG +
+  Framer Motion (lighter than Lottie).
 - A quiet **petal rain** drifts through the hero (SVG + Framer Motion).
 - Everything else is kept calm and ceremonial.
 

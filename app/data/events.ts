@@ -3,11 +3,14 @@
  * -----------------------------------------------------------------------------
  * ONE array, edit here. Each entry drives a card in the grid.
  *
+ * Card visual priority:  image  →  lottieSrc  →  static SVG motif
+ *
+ * • `image`      — optional photo/artwork under /public (e.g. the kalyanam
+ *                  images in /public/kalyanams). Shown first when present.
  * • `lottieSrc`  — optional path to a .lottie or .json file in /public.
  *                  Drop a file in `public/lottie/<id>.lottie` and set it here.
- *                  If omitted (or it fails to load) the card renders its
- *                  static SVG motif fallback instead — no layout shift.
- * • `motif`      — selects the built-in ceremonial SVG (see components/motifs).
+ * • `motif`      — built-in ceremonial SVG (components/motifs), the final
+ *                  graceful fallback if image + lottie are absent or fail.
  * • `accent`     — per-kalyanam gradient identity (from → to, plus glow).
  */
 
@@ -18,6 +21,8 @@ export interface Kalyanam {
   teluguTitle: string;
   englishTitle: string;
   description: string;
+  /** Path under /public, e.g. "/kalyanams/siva.png". Optional. */
+  image?: string;
   /** Path under /public, e.g. "/lottie/siva.lottie". Optional. */
   lottieSrc?: string;
   motif: MotifId;
@@ -32,8 +37,10 @@ export interface Kalyanam {
 }
 
 export const BRAND = {
+  logo: "/brand/muhurtham-logo.png",
   telugu: "ముహూర్తం",
   latin: "muhurtham.app",
+  kickerTelugu: "శుభకార్యాలు",
   taglineTelugu: "శుభ ముహూర్తం మీ చేతివేళ్ల చెంత",
   taglineEnglish: "Auspicious moments, booked with ease",
   comingSoonTelugu: "త్వరలో",
@@ -47,6 +54,7 @@ export const KALYANAMS: Kalyanam[] = [
     englishTitle: "Siva Kalyanam",
     description:
       "Book the celestial wedding of Siva & Parvati with ritual precision.",
+    image: "/kalyanams/siva.png",
     // lottieSrc: "/lottie/siva.lottie",
     motif: "siva",
     accent: {
@@ -61,6 +69,7 @@ export const KALYANAMS: Kalyanam[] = [
     englishTitle: "Rama Kalyanam",
     description:
       "Arrange Sita Rama Kalyanam — kodanda, lotus and a rain of petals.",
+    image: "/kalyanams/rama.png",
     // lottieSrc: "/lottie/rama.lottie",
     motif: "rama",
     accent: {
@@ -75,6 +84,7 @@ export const KALYANAMS: Kalyanam[] = [
     englishTitle: "Venkatesha Kalyanam",
     description:
       "Plan Srinivasa Kalyanam — tirunamam, conch, chakra and lamp glow.",
+    image: "/kalyanams/venkatesha.png",
     // lottieSrc: "/lottie/venkatesha.lottie",
     motif: "venkatesha",
     accent: {
