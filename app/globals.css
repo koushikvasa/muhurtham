@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   muhurtham.app — temple / auspicious design system
+   ========================================================================== */
+
+@theme {
+  /* Brand palette */
+  --color-maroon: #7a1f2b;
+  --color-maroon-deep: #5c141d;
+  --color-saffron: #d99a2b;
+  --color-cream: #fbf6ec;
+  --color-cream-deep: #f3ead6;
+  --color-gold: #c99a3b;
+  --color-gold-soft: #e4c477;
+  --color-ink: #3a1e12;
+  --color-ink-soft: #6b4a38;
+
+  /* Fonts (variables provided by next/font in layout.tsx) */
+  --font-telugu: var(--font-telugu);
+  --font-display: var(--font-display);
+
+  /* Fluid type scale — clamp() only, no fixed px on headings.
+     Scales cleanly from 360px phones to 1440px+ desktops / TVs. */
+  --text-brand: clamp(2.75rem, 1.4rem + 6vw, 6.5rem);
+  --text-hero: clamp(2.1rem, 1.1rem + 4.4vw, 4.75rem);
+  --text-h2: clamp(1.6rem, 1.05rem + 2.4vw, 2.85rem);
+  --text-title: clamp(1.9rem, 1.35rem + 2.4vw, 3rem);
+  --text-lede: clamp(1.05rem, 0.92rem + 0.6vw, 1.35rem);
+  --text-body: clamp(1rem, 0.95rem + 0.25vw, 1.125rem);
+  --text-small: clamp(0.82rem, 0.78rem + 0.2vw, 0.95rem);
+}
+
+:root {
+  color-scheme: light;
+  --page: var(--color-cream);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background-color: var(--page);
+  color: var(--color-ink);
+  font-family: var(--font-display), Georgia, "Times New Roman", serif;
+  font-size: var(--text-body);
+  line-height: 1.6;
+  overflow-x: clip; /* belt-and-braces against horizontal scroll */
+
+  /* Warm layered atmosphere behind the whole page. */
+  background-image:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      rgba(217, 154, 43, 0.16),
+      rgba(217, 154, 43, 0) 60%
+    ),
+    radial-gradient(
+      90% 60% at 100% 0%,
+      rgba(122, 31, 43, 0.1),
+      rgba(122, 31, 43, 0) 55%
+    ),
+    radial-gradient(
+      70% 50% at 0% 100%,
+      rgba(201, 154, 59, 0.12),
+      rgba(201, 154, 59, 0) 60%
+    );
+  background-attachment: fixed;
+
+  /* Respect notches / rounded corners on all sides. */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+    env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+/* Telugu is the visual hero — anywhere lang="te" or .font-telugu is used. */
+:lang(te),
+.font-telugu {
+  font-family: var(--font-telugu), var(--font-display), sans-serif;
+}
+
+/* Fine gold hairline used on cards & dividers */
+.rule-gold {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold) 20%,
+    var(--color-saffron) 50%,
+    var(--color-gold) 80%,
+    transparent
+  );
+}
+
+/* Accessible focus ring in-brand */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-saffron);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Ensure interactive targets are always >= 44px */
+.tap-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* ==========================================================================
+   Reduced motion — replace ALL motion (Framer + Lottie + CSS) with
+   static states. Components also read useReducedMotion() in JS.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
